@@ -84,7 +84,7 @@
 
 ```bash
 # 1. 克隆代码
-git clone [[https://github.com/10000ge10000/epic-awesome-gamer.git](https://github.com/10000ge10000/epic-awesome-gamer.git)](https://github.com/10000ge10000/epic-awesome-gamer.git)
+git clone [https://github.com/10000ge10000/epic-awesome-gamer.git](https://github.com/10000ge10000/epic-awesome-gamer.git)
 cd epic-awesome-gamer/docker
 
 # 2. 配置环境变量

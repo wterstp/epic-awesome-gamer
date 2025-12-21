@@ -3,10 +3,6 @@
 # 🎮 Epic Awesome Gamer
 ### (AiHubMix Enhanced Edition)
 
-<img src="https://img.shields.io/static/v1?message=Python 3.12&color=3776AB&style=for-the-badge&logo=python&label=Build">
-<img src="https://img.shields.io/static/v1?message=Gemini Pro&color=4285F4&style=for-the-badge&logo=google&label=AI Model">
-<img src="https://img.shields.io/github/license/QIN2DIM/epic-awesome-gamer?style=for-the-badge&color=orange">
-<img src="https://img.shields.io/github/actions/workflow/status/QIN2DIM/epic-awesome-gamer/ci.yaml?label=Auto Claim&style=for-the-badge&color=2ea44f">
 
 <p class="description">
   🍷 <b>优雅、智能、全自动</b>。<br>
@@ -79,7 +75,7 @@
 
 ```bash
 # 1. 克隆代码
-git clone [https://github.com/your-username/epic-awesome-gamer.git](https://github.com/your-username/epic-awesome-gamer.git)
+git clone [https://github.com/10000ge10000/epic-awesome-gamer.git](https://github.com/10000ge10000/epic-awesome-gamer.git)
 cd epic-awesome-gamer/docker
 
 # 2. 配置环境变量
@@ -88,3 +84,55 @@ cp .env.example .env
 
 # 3. 启动容器
 docker compose up -d
+
+```
+
+---
+
+## 🛠️ 常见问题 (FAQ)
+
+<details>
+<summary><b>Q: 为什么日志显示 "Login with Email ... Timeout"?</b></summary>
+
+**A:** 这是因为 GitHub Actions 的共享 IP 段可能被 Epic 临时风控。
+
+* **现象**：脚本能打开页面，但在点击登录按钮时无反应。
+* **解决**：通常 GitHub 会自动重试。如果连续失败，请等待 1-2 小时后手动重新运行工作流，GitHub 分配新 IP 后即可恢复。
+
+</details>
+
+<details>
+<summary><b>Q: 使用中转 API 报错 "400 Bad Request" 或 "File API not supported"?</b></summary>
+
+**A:** 请确保你使用的是本仓库的最新代码。
+
+* 本项目内置了 `utils.py` 补丁，会拦截 Google SDK 的文件上传行为，将其转换为 **Inline Base64** 数据。
+* 这完美绕过了中转站对文件上传 API 的限制。
+
+</details>
+
+<details>
+<summary><b>Q: 必须关闭二步验证 (2FA) 吗？</b></summary>
+
+**A:** **是的，必须关闭。**
+由于脚本运行在无头模式 (Headless) 下，无法处理短信或邮件验证码。请在 Epic 官网账户设置中暂时禁用 2FA。
+
+</details>
+
+---
+
+## ⚠️ 免责声明
+
+* 本项目仅供 Python 学习与技术交流使用。
+* 使用脚本自动化操作可能违反 Epic Games 的服务条款，使用者需自行承担风险。
+* 请勿将本项目用于任何商业用途。
+
+---
+
+<div align="center">
+<b>Enjoy your free games! 🎮</b>
+</div>
+
+```
+
+```

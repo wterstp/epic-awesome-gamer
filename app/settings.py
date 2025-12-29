@@ -86,8 +86,7 @@ def _apply_aihubmix_patch():
             kwargs['api_key'] = api_key
             
             base_url = settings.GEMINI_BASE_URL.rstrip('/')
-            if base_url.endswith('/v1'): base_url = base_url[:-3]
-            if not base_url.endswith('/gemini'): base_url = f"{base_url}/gemini"
+            # 不再强制添加 /gemini 后缀，直接使用用户配置的 URL
             
             kwargs['http_options'] = types.HttpOptions(base_url=base_url)
             logger.info(f"🚀 AiHubMix 补丁已应用 | 模型: {settings.GEMINI_MODEL} | 地址: {base_url}")

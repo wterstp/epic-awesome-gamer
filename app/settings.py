@@ -29,15 +29,15 @@ class EpicSettings(AgentConfig):
         default_factory=lambda: os.getenv("GEMINI_API_KEY"),
         description="AiHubMix 的令牌",
     )
-    
+
     GEMINI_BASE_URL: str = Field(
         default=os.getenv("GEMINI_BASE_URL", "https://aihubmix.com"),
         description="中转地址",
     )
-    
+
     GEMINI_MODEL: str = Field(
         default=os.getenv("GEMINI_MODEL", "gemini-2.5-pro"),
-        description="模型名称",
+        description="模型名称（统一设置所有模型）",
     )
 
     EPIC_EMAIL: str = Field(default_factory=lambda: os.getenv("EPIC_EMAIL"))
@@ -63,6 +63,12 @@ class EpicSettings(AgentConfig):
 
 settings = EpicSettings()
 settings.ignore_request_questions = ["Please drag the crossing to complete the lines"]
+
+# 用 GEMINI_MODEL 统一覆盖 hcaptcha-challenger 的所有模型配置
+settings.CHALLENGE_CLASSIFIER_MODEL = settings.GEMINI_MODEL
+settings.IMAGE_CLASSIFIER_MODEL = settings.GEMINI_MODEL
+settings.SPATIAL_POINT_REASONER_MODEL = settings.GEMINI_MODEL
+settings.SPATIAL_PATH_REASONER_MODEL = settings.GEMINI_MODEL
 
 # ==========================================
 # [方案一修复版] AiHubMix 终极补丁

@@ -106,6 +106,9 @@ async def deploy():
     # Log current configuration for debugging
     sj = settings.model_dump(mode="json")
     sj["headless"] = headless
+    # 明文显示关键配置
+    sj["GEMINI_BASE_URL"] = settings.GEMINI_BASE_URL
+    sj["GEMINI_MODEL"] = settings.GEMINI_MODEL
     logger.debug(
         f"Starting deployment with configuration: {json.dumps(sj, indent=2, ensure_ascii=False)}"
     )

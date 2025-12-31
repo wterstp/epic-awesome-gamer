@@ -63,28 +63,49 @@ def get_promotions() -> List[PromotionGame]:
             continue
 
         # -----------------------------------------------------------
-        # 🟢 修复开始：智能判断 URL 前缀 (Bundle vs Base Game)
+        # 🟢 修复 V2 (增强版)：多维度检测 Bundle (Trine 修复)
         # -----------------------------------------------------------
-        base_url = URL_PRODUCT_PAGE # 默认为普通游戏
         
-        # 检查 offerType 是否为捆绑包
+        # 1. 调试：如果遇到 Trine，打印原始数据以便分析
+        if "Trine" in e.get("title", ""):
+            logger.debug(f"🔍 Inspecting Game Data: {e.get('title')} | offerType: {e.get('offerType')}")
+
+        is_bundle = False
+        
+        # 判定 A: 检查 offerType
         if e.get("offerType") == "BUNDLE":
-            base_url = URL_PRODUCT_BUNDLES
-            logger.debug(f"📦 Detected Bundle Type: {e.get('title')}")
+            is_bundle = True
+        
+        # 判定 B: 检查 categories (分类路径)
+        if not is_bundle:
+            for cat in e.get("categories", []):
+                if "bundle" in cat.get("path", "").lower():
+                    is_bundle = True
+                    logger.debug(f"📦 Detected Bundle via Category: {e.get('title')}")
+                    break
+
+        # 判定 C: 标题关键字兜底 (Trine Classic Collection 必定中招)
+        if not is_bundle and "Collection" in e.get("title", ""):
+             is_bundle = True
+             logger.debug(f"📦 Detected Bundle via Title keyword: {e.get('title')}")
+
+        # 根据判定结果选择 Base URL
+        base_url = URL_PRODUCT_BUNDLES if is_bundle else URL_PRODUCT_PAGE
 
         try:
             # 优先使用 offerMappings 中的 pageSlug
-            slug = e['offerMappings'][0]['pageSlug']
-            e["url"] = f"{base_url.rstrip('/')}/{slug}"
-        except (KeyError, IndexError):
+            if e.get('offerMappings'):
+                slug = e['offerMappings'][0]['pageSlug']
+                e["url"] = f"{base_url.rstrip('/')}/{slug}"
             # 兜底使用 productSlug
-            if e.get("productSlug"):
+            elif e.get("productSlug"):
                 e["url"] = f"{base_url.rstrip('/')}/{e['productSlug']}"
             else:
-                logger.info(f"Failed to get URL: {e}")
-                continue
-        # -----------------------------------------------------------
-        # 🟢 修复结束
+                # 最后的救命稻草：urlSlug
+                 e["url"] = f"{base_url.rstrip('/')}/{e.get('urlSlug', 'unknown')}"
+        except (KeyError, IndexError):
+            logger.info(f"Failed to get URL: {e}")
+            continue
         # -----------------------------------------------------------
 
         logger.info(e["url"])
